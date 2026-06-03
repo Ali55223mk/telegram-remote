@@ -48,9 +48,15 @@ def get_local_ip():
 
 def get_mac():
     try:
+        r = subprocess.run(["getmac", "/FO", "CSV", "/NH"], capture_output=True, text=True)
+        for line in r.stdout.strip().split("\n"):
+            parts = line.split(",")
+            if len(parts) >= 2 and "Media disconnected" not in parts[1]:
+                mac = parts[0].strip('"').replace("-", ":").upper()
+                if mac and not mac.startswith("0A:00:27") and not mac.startswith("00:FF"):
+                    return mac
         mac_hex = uuid.getnode()
-        mac_str = ":".join(f"{(mac_hex >> 8*i) & 0xFF:02X}" for i in range(5, -1, -1))
-        return mac_str
+        return ":".join(f"{(mac_hex >> 8*i) & 0xFF:02X}" for i in range(5, -1, -1))
     except:
         return ""
 
