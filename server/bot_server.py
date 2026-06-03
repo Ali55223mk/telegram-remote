@@ -85,7 +85,8 @@ def webhook():
             "/shutdown - إطفاء الكمبيوتر\n"
             "/restart - إعادة تشغيل\n"
             "/lock - قفل الشاشة\n"
-            "/password <رمز> - تغيير كلمة السر\n"
+             "/password - عرض كلمة السر\n"
+             "/password <رمز> - تغيير كلمة السر\n"
             "/cmd <أمر> - تشغيل أمر CMD\n"
             "/screenshot - تصوير الشاشة\n"
             "/wol - تشغيل الكمبيوتر عن بعد\n"
@@ -123,11 +124,13 @@ def webhook():
             send_telegram(chat_id, "❌ الجهاز طافي.")
 
     elif cmd == "/password":
-        if len(parts) < 2:
-            send_telegram(chat_id, "⚠️ استخدم: /password <كلمة_السر>")
-        elif pc_status["online"]:
-            pending_tasks.append({"cmd": "password", "args": parts[1], "chat_id": chat_id, "ts": time.time()})
-            send_telegram(chat_id, "🔑 جاري تغيير كلمة السر...")
+        if pc_status["online"]:
+            if len(parts) < 2:
+                pending_tasks.append({"cmd": "getpassword", "chat_id": chat_id, "ts": time.time()})
+                send_telegram(chat_id, "🔑 جاري جلب كلمة السر...")
+            else:
+                pending_tasks.append({"cmd": "password", "args": parts[1], "chat_id": chat_id, "ts": time.time()})
+                send_telegram(chat_id, "🔑 جاري تغيير كلمة السر...")
         else:
             send_telegram(chat_id, "❌ الجهاز طافي.")
 

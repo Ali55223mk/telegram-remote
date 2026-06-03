@@ -119,7 +119,14 @@ def execute_task(task):
     error = None
     photo_path = None
 
-    if cmd == "status":
+    if cmd == "getpassword":
+        pass_file = os.path.join(os.path.dirname(__file__), "pass.txt")
+        if os.path.exists(pass_file):
+            with open(pass_file, "r") as f:
+                output = f"🔑 كلمة السر: `{f.read().strip()}`"
+        else:
+            output = "⚠️ لا توجد كلمة سر محفوظة"
+    elif cmd == "status":
         output, error = get_status()
     elif cmd == "shutdown":
         output = "🛑 Shutting down..."
