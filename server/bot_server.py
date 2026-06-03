@@ -175,6 +175,9 @@ def heartbeat():
     pc_status["online"] = True
     pc_status["ip"] = data.get("ip", request.remote_addr)
     pc_status["last_seen"] = datetime.now().isoformat()
+    mac = data.get("mac", "").upper()
+    if mac:
+        pc_status["mac"] = mac
     return jsonify({"tasks": pending_tasks})
 
 @app.route("/api/result", methods=["POST"])

@@ -11,6 +11,7 @@ import socket
 import platform
 import tempfile
 import threading
+import uuid
 from datetime import datetime
 
 try:
@@ -44,6 +45,14 @@ def get_local_ip():
         return ip
     except:
         return "unknown"
+
+def get_mac():
+    try:
+        mac_hex = uuid.getnode()
+        mac_str = ":".join(f"{(mac_hex >> 8*i) & 0xFF:02X}" for i in range(5, -1, -1))
+        return mac_str
+    except:
+        return ""
 
 def run_cmd(command, timeout=30):
     try:
@@ -155,7 +164,7 @@ def main():
             last_heartbeat = now
             try:
                 resp = requests.post(f"{SERVER_URL}/api/heartbeat",
-                    json={"ip": get_local_ip()}, timeout=10)
+                    json={"ip": get_local_ip(), "mac": get_mac()}, timeout=10)
                 if resp.ok:
                     data = resp.json()
                     tasks = data.get("tasks", [])
