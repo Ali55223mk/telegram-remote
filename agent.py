@@ -30,7 +30,7 @@ except ImportError:
     psutil = None
 
 # ===== CONFIG =====
-SERVER_URL = "https://telegram-remote.up.railway.app"  # ⚠️ غير هذا الرابط إلى رابط مشروعك على Railway بعد النشر
+SERVER_URL = "https://bot-production-8cf4.up.railway.app"
 POLL_INTERVAL = 3  # seconds
 HEARTBEAT_INTERVAL = 30  # seconds
 # =================
